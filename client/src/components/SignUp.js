@@ -17,7 +17,15 @@ class SignUp extends React.Component{
        if(this.state.password !== this.state.confirmPassword){
            this.setState({...this.state, error: 'Password and Confirm Password fields must match'})
        }else{
-           // Send Data to server 
+        
+            fetch('http://localhost:4000/signupSubmit', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(this.state)
+            })
+            this.resetForm()
        }
     }
 
@@ -39,18 +47,18 @@ class SignUp extends React.Component{
 
         return(
             <form onSubmit = {this.handleSubmit} method="POST">
-                <div class="formcontent">   
+                <div className="formcontent">   
                 
-                    <label for='name'> Name: </label>
+                    <label htmlFor='name'> Name: </label>
                     <input type='text' id ='name' name='name' value={this.state.name} onChange= {this.handleChange} required/>
                 
-                    <label for='email'> Email: </label>
+                    <label htmlFor='email'> Email: </label>
                     <input type='text' id ='email' name='email' value={this.state.email} onChange= {this.handleChange} required/>
 
-                    <label for= 'password'>Password: </label>
+                    <label htmlFor= 'password'>Password: </label>
                     <input type='password' id ='password' name ='password' value={this.state.password} onChange= {this.handleChange} required/>
 
-                    <label for= 'confirmPassword'>Confirm Password: </label>
+                    <label htmlFor= 'confirmPassword'>Confirm Password: </label>
                     <input type='password' id = 'confirmPassword' name ='confirmPassword' value={this.state.confirmPassword} onChange= {this.handleChange} required/>
             
                     <input type= 'submit' value= 'Create Account'/>

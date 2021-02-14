@@ -6,25 +6,25 @@ function MainNavBar(){
     return(
         <nav id = 'mainNav'>
             <ul>
-            <Link to= '/' class= 'navLink'>
+            <Link to= '/' className= 'navLink'>
                 <li> Home </li>
             </Link>
-            <Link to= '/orgs'  class= 'navLink'>
+            <Link to= '/orgs'  className= 'navLink'>
                 <li> Your Organizations </li>
             </Link>
-            <Link to= '/browse'  class= 'navLink'>
+            <Link to= '/browse'  className= 'navLink'>
                 <li> Browse Organizations </li>
             </Link>
-            <Link to= '/registerOrg'  class= 'navLink'>
+            <Link to= '/registerOrg'  className= 'navLink'>
                 <li> Register Your Organization </li>
             </Link>
-            <Link to= '/profile'  class= 'navLink'>
+            <Link to= '/profile'  className= 'navLink'>
                 <li> Your Profile </li>
             </Link>
-            <Link to= '/login'  class= 'navLink'>
+            <Link to= '/login'  className= 'navLink'>
                 <li> Log In</li>
             </Link>
-            <Link to= '/signup'  class= 'navLink'>
+            <Link to= '/signup'  className= 'navLink'>
                 <li>Sign Up</li>
             </Link>
         </ul>

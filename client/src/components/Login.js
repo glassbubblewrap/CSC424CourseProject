@@ -5,7 +5,7 @@ class Login extends React.Component{
 
     constructor(props){
         super(props)
-        this.state = { name: '', password: '', error: ''}   // initial state
+        this.state = { email: '', password: '', error: ''}   // initial state
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
       }
@@ -14,6 +14,18 @@ class Login extends React.Component{
 
         //TO DO
         e.preventDefault()
+        fetch('http://localhost:4000/loginSubmit', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(this.state)
+        })
+        .then(result=> result.json())
+        .then(data => console.log(data))
+
+
+
 
         // Process Data on server
         this.resetForm()
@@ -21,10 +33,9 @@ class Login extends React.Component{
 
     handleChange(e){
     //Used when characters are typed into the input field
-        const value = e.target.value;
         this.setState({
           ...this.state,
-          [e.target.name]: value
+          [e.target.name]:  e.target.value
         });
     }
 
@@ -36,11 +47,11 @@ class Login extends React.Component{
     render(){
     return(
         <form onSubmit = {this.handleSubmit} method="POST">
-                <div class="formcontent">               
-                    <label for="email">Email: </label>
+                <div className="formcontent">               
+                    <label htmlFor="email">Email: </label>
                     <input type="text" name="email" id="email" value={this.state.email} onChange= {this.handleChange} required/> 
 
-                    <label for= "password">Password: </label>
+                    <label htmlFor= "password">Password: </label>
                     <input type="password" name ="password" id= "password" value={this.state.password} onChange={this.handleChange} required/>
 
                     <input type= "submit" value= "Login"/>

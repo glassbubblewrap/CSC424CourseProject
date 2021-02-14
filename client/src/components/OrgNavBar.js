@@ -9,19 +9,19 @@ class OrgNavBar extends React.Component{
     return(
         <nav id = 'OrgNav'>
             <ul>
-            <Link to= '/orgHome' class= 'navLink'>
+            <Link to= '/orgHome' className= 'navLink'>
                 <li> Organization Home </li>
             </Link>
-            <Link to= '/announcements' class= 'navLink'>
+            <Link to= '/announcements' className= 'navLink'>
                 <li> Announcements </li>
             </Link>
-            <Link to= '/events' class= 'navLink'>
+            <Link to= '/events' className= 'navLink'>
                 <li> Events </li>
             </Link>
-            <Link to= '/members'  class= 'navLink'>
+            <Link to= '/members'  className= 'navLink'>
                 <li> Members</li>
             </Link>
-            <Link to= '/chat' class= 'navLink'>
+            <Link to= '/chat' className= 'navLink'>
                 <li> Chat</li>
             </Link>
         </ul>
