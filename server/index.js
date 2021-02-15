@@ -20,6 +20,7 @@ app.post('/loginSubmit', (req, res)=>{
     //if those checks don't pass send a response of format {error: 'string'}
     console.log('got request')
     console.log(req.body)
+    res.send({error: 'error message test'})
 
 })
 
@@ -32,7 +33,7 @@ app.post('/signupSubmit',(req, res)=>{
     res.send({status: 'done'})
 
 })
-app.post('registerOrgSubmit', (req,res)=> {
+app.post('/registerOrgSubmit', (req,res)=> {
 
 
     //Insert this data to the database to create a new club

@@ -24,7 +24,12 @@ class RegisterOrg extends React.Component{
             body: JSON.stringify({name: this.state.name, location: this.state.location, about: this.state.about})
         })
         .then(result=> result.json())
-        .then(data => console.log(data))
+        .then(data => {
+
+            if(data.error){
+                this.setState({...this.state, error: data.error})
+            }
+        })
         //this.setState({...this.state, error: 'Password and Confirm Password fields must match'})
    
         // Send Data to server 

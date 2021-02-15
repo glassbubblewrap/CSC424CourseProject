@@ -11,20 +11,27 @@ class SignUp extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this)
       }
 
-    async handleSubmit(e){
+    handleSubmit(e){
        //TO DO
        e.preventDefault()
        if(this.state.password !== this.state.confirmPassword){
            this.setState({...this.state, error: 'Password and Confirm Password fields must match'})
        }else{
         
-            await fetch('http://localhost:4000/signupSubmit', {
+            fetch('http://localhost:4000/signupSubmit', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
                 },
                 body: JSON.stringify({name: this.state.name, email: this.state.email , password: this.state.password})
             })
+            .then(result=> result.json())
+            .then(data => {
+
+                if(data.error){
+                    this.setState({...this.state, error: data.error})
+                }
+        })
             //this.resetForm()
        }
     }

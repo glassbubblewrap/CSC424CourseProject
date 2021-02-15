@@ -22,7 +22,12 @@ class Login extends React.Component{
             body: JSON.stringify({email: this.state.email, password: this.state.password})
         })
         .then(result=> result.json())
-        .then(data => console.log(data))
+        .then(data => {
+
+            if(data.error){
+                this.setState({...this.state, error: data.error})
+            }
+        })
 
 
 
