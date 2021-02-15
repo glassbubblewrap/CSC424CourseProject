@@ -21,7 +21,7 @@ class RegisterOrg extends React.Component{
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify(this.state)
+            body: JSON.stringify({name: this.state.name, location: this.state.location, about: this.state.about})
         })
         .then(result=> result.json())
         .then(data => console.log(data))

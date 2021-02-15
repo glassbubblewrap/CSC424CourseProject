@@ -7,7 +7,7 @@ const PORT = 4000
 
 
 app.use(bodyParser.urlencoded({extended: true}))
-app.use(cors)
+app.use(cors())
 app.use(bodyParser.json())
 
 
@@ -20,7 +20,6 @@ app.post('/loginSubmit', (req, res)=>{
     //if those checks don't pass send a response of format {error: 'string'}
     console.log('got request')
     console.log(req.body)
-    res.send({status: 'done'})
 
 })
 
