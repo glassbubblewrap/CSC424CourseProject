@@ -1,4 +1,5 @@
 import React from 'react'
+import {Redirect} from 'react-router-dom'
 import './css/SignUp.css'
 
 
@@ -30,6 +31,8 @@ class SignUp extends React.Component{
 
                 if(data.error){
                     this.setState({...this.state, error: data.error})
+                }else{
+                    this.setState({...this.state, success: true})
                 }
         })
             //this.resetForm()
@@ -52,6 +55,10 @@ class SignUp extends React.Component{
 
     render(){
 
+            if(this.state.success){
+                return <Redirect to= {{pathname:'/profile', from: this.props.location}} />
+             }
+
         return(
             <form onSubmit = {this.handleSubmit} method="POST">
                 <div className="formcontent">   
@@ -70,7 +77,7 @@ class SignUp extends React.Component{
             
                     <input type= 'submit' value= 'Create Account'/>
                     <p id= 'errorMessage'>{this.state.error}</p>
-                    <p> Already have an account? Login <a href= '/login'>here</a></p>
+                    
                 </div>
             </form>
         )

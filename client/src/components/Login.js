@@ -1,4 +1,5 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 //import {Link} from 'react-router-dom'
 
 class Login extends React.Component{
@@ -27,6 +28,10 @@ class Login extends React.Component{
             if(data.error){
                 this.setState({...this.state, error: data.error})
             }
+            else{
+
+                this.setState({...this.state, success: true, userId: data.userId})
+            }
         })
 
 
@@ -50,6 +55,11 @@ class Login extends React.Component{
     }
 
     render(){
+
+        if(this.state.success){
+            return <Redirect to= {{pathname:'/', state: {from: this.props.location, userId: this.state.userId}}} />
+         }
+
     return(
         <form onSubmit = {this.handleSubmit} method="POST">
                 <div className="formcontent">               
@@ -62,7 +72,7 @@ class Login extends React.Component{
                     <input type= "submit" value= "Login"/>
                     
                     <p id='errorMessage'>{this.state.error} </p>
-                    <p> Don't have an account? Sign Up <a href="/signup">here</a></p>
+                
                 </div>  
             </form>
         )

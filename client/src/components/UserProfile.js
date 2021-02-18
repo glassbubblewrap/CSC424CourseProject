@@ -1,10 +1,13 @@
+import React from 'react'
 
+class UserProfile extends React.Component{
 
-function UserProfile(){
+    render(){
     return(
 
         <h2>This is where a user would see their profile</h2>
     )
+    }
 }
 
 export default UserProfile

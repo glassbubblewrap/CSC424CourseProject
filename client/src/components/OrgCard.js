@@ -10,16 +10,19 @@ class OrgCard extends React.Component{
 
     constructor(props){
         super(props);
-        this.state = { id: this.props.id , name: props.name, location: props.location}
+        this.state = { id: this.props.id , name: this.props.name, location: this.props.location}
     }
     
     
     render(){
 
+        let path = '/organization/' + this.state.id
+
+
         return(
             <div id='OrgCardDiv'>
             <nav>
-                <Link to= {this.state.id} >
+                <Link to= {path} >
                 <div >
                     <h3> {this.state.name} </h3>
                     <p> {this.state.location} </p>

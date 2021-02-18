@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import './css/OrgNavBar.css'
 
 
 class OrgNavBar extends React.Component{
@@ -9,19 +10,19 @@ class OrgNavBar extends React.Component{
     return(
         <nav id = 'OrgNav'>
             <ul>
-            <Link to= '/orgHome' className= 'navLink'>
+            <Link to= '/orgHome' className= 'OrgLink'>
                 <li> Organization Home </li>
             </Link>
-            <Link to= '/announcements' className= 'navLink'>
+            <Link to= '/announcements' className= 'OrgLink'>
                 <li> Announcements </li>
             </Link>
-            <Link to= '/events' className= 'navLink'>
+            <Link to= '/events' className= 'OrgLink'>
                 <li> Events </li>
             </Link>
-            <Link to= '/members'  className= 'navLink'>
+            <Link to= '/members'  className= 'OrgLink'>
                 <li> Members</li>
             </Link>
-            <Link to= '/chat' className= 'navLink'>
+            <Link to= '/chat' className= 'OrgLink'>
                 <li> Chat</li>
             </Link>
         </ul>

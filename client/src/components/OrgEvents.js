@@ -4,13 +4,67 @@ class OrgEvents extends React.Component{
 
     constructor(props){
         super(props)
-        this.state ={org_id: this.props.org_id}
+        this.state ={org_id: this.props.org_id, isOrgLeader: true, formShown: true}
+        this.toggleForm = this.toggleForm.bind(this)
     }
+
+    componentDidMount(){
+
+        //fetch the events for this org using the id and save them to the state
+        //Also check if the current user is in the org with the given id and their status in the org
+        fetch('http://localhost:4000')
+    }
+
+    toggleForm(){
+
+        this.setState({...this.state, formShown : !this.state.formShown})
+    }
+
+    
     render(){
+
+        let AddEventButton
+
+            if(this.state.isOrgLeader){
+                AddEventButton = <button onClick= {this.toggleForm}>Add an Event</button>
+
+            }else{
+
+                AddEventButton = <div></div>
+            }
+            let EventForm
+            if(this.formShown){
+
+                EventForm = (
+                <form>
+
+                    <label htmlFor= 'eventName'> Event Name</label>
+                    <input type= 'text' id= 'eventName' name= 'eventNmae' required/>
+
+                    <label htmlFor= 'eventDate'> Event Date</label>
+                    <input type= 'Date' id= 'eventDate' name= 'eventDate' required/>
+
+                    <label htmlFor= 'eventDate'> Event Time</label>
+                    <input type= 'text' id= 'eventTime' name= 'eventTime' required/>
+
+                    <label htmlFor= 'eventLocation'>Location </label>
+                    <input type= 'text' id= 'eventLocation' name= 'eventLocation' required/>
+
+                    <input type= 'submit' value = 'Add Event' />
+
+
+                </form>
+                )
+            }else{
+
+                EventForm = <div></div>
+            }
+
         return(
             <div>
-                <h1> {this.state.org_id}</h1>
-                <h1>Your Orgs Events</h1>
+                <p> here is the event data</p>
+                {AddEventButton}
+                {EventForm}
             </div>
 
         )
