@@ -25,6 +25,7 @@ class App extends React.Component {
     this.getData()
 
     setInterval(this.getData, 5000)
+
   }
 
   getData(){

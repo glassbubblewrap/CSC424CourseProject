@@ -1,10 +1,16 @@
 const express = require('express')
 const session = require('express-session')
-const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const mongoose = require('mongoose')
+const MongoClient = require('mongodb').MongoClient;
 const app = express()
 const PORT = 4000
+const usersRouter = require('./routes/users');
+const orgRouter = require('./routes/organizations')
+
+require('dotenv').config();
+
 
 
 
@@ -12,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 app.use(bodyParser.json())
 
-app.use(cookieParser())
+
 app.use(session({
     secret:'lafjekjfo39rt0t4-))_R03i9rt4#REW"QR#', // value here can be anything
     resave: true,
@@ -20,7 +26,13 @@ app.use(session({
 }))
 
 
+const uri = "mongodb+srv://admin:USM123@cluster0.wl7k0.mongodb.net/CSCProjectData?retryWrites=true&w=majority";
 
+const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+client.connect(err => {
+    const collection = client.db("test").collection("devices");
+    client.close();
+})
 
 
 app.post('/loginSubmit', (req, res)=>{
@@ -33,6 +45,10 @@ app.post('/loginSubmit', (req, res)=>{
     // I am not sure how to keep track of if someone is logged in or not 
     // req.session.loggedin = true
     //req.session.userId = the id of the user that logged in
+
+    // make sure that the email exist in the database
+    // compare the password field of the request to the password in the database
+    //
     console.log('request submitted')
 
     req.session.loggedin = true
@@ -47,6 +63,22 @@ app.post('/signupSubmit',(req, res)=>{
 
     //{name, email, password, confirmPassword, error}
     //if no errors set req.session.loggedin = true and req.session.userId = the new id of the user
+
+    const name = req.body.name
+    const email = req.body.email
+    const password = req.body.password
+
+
+    const newUser = new User({
+
+        name, 
+        email,
+        password,
+    })
+
+    newUser.save()
+    .then(()=> res.json('User Added to database'))
+
 
     console.log('signup request received')
     console.log(req.body)
@@ -67,12 +99,13 @@ app.get('/checkIfloggedIn', (req, res)=>{
 
     //send the session data res.send({loggedIn: req.session.loggedin}, user_id: req.session.user_id)
 
-
-    console.log(req.session.loggedin)
-
-    res.send({loggedin: req.session.loggedin, userId: req.session.userId})
+    res.send({loggedin: true})
      
  
  })
+
+
+
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

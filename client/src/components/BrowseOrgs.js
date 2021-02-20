@@ -18,19 +18,16 @@ class BrowseOrgs extends React.Component{
     //Must get the org_id, name and location from the database
 
     // componentDidMount(){
-    //     //get the orgId, name and location from the database and save them in an arra
+    //     //get the orgId, name and location from the database and save them in an array
     //     fetch('http://localhost:40000/getOrgCard',{method: 'GET'})
-    //     .then(res=> res.json)
+    //     .then(res=> res.json())
     //     .then(data => this.setState({...this.state, orgs : JSON.parse(data)} ))
 
     // }
     
    // render a search bar
-   //render an OrgCard component for each of the Organizations returned
-   // from the server
+ 
 
-     /* <OrgCard id= '12345' name= 'My Organization' location= "Hattiesburg MS."/>
-                    <OrgCard id= '6896767' name= 'ACM' location= "Hattiesburg MS." /> */
         render(){
         return(
             <div>
