@@ -1,5 +1,6 @@
+const mongoose = require('mongoose')
 const router = require('express').Router();
-let Organization = require('../models/organization.model');
+const Organization = require('../models/organization.model');
 
 router.route('/').get((req, res) => {
     Organization.find()
@@ -7,14 +8,7 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/add').post((req, res) => {
-    const name = req.body.name;
 
-    const newUser = new User({name});
 
-    newUser.save()
-        .then(() => res.json('Org added!'))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
 
 module.exports = router;

@@ -2,12 +2,15 @@ const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const MongoClient = require('mongodb').MongoClient;
 const app = express()
 const PORT = 4000
 const usersRouter = require('./routes/users');
 const orgRouter = require('./routes/organizations')
+const Organization = require('./models/organization.model')
+const User = require('./models/user.model')
 
 require('dotenv').config();
 
@@ -18,6 +21,9 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 app.use(bodyParser.json())
 
+app.use(orgRouter)
+app.use(usersRouter)
+
 
 app.use(session({
     secret:'lafjekjfo39rt0t4-))_R03i9rt4#REW"QR#', // value here can be anything
@@ -26,13 +32,21 @@ app.use(session({
 }))
 
 
-const uri = "mongodb+srv://admin:USM123@cluster0.wl7k0.mongodb.net/CSCProjectData?retryWrites=true&w=majority";
+const url = "mongodb+srv://admin:USM123@cluster0.wl7k0.mongodb.net/CSCProjectDatabase?retryWrites=true&w=majority";
 
-const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
-client.connect(err => {
-    const collection = client.db("test").collection("devices");
-    client.close();
-})
+//  const client = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
+// client.connect(err => {
+//     console.log('connection Established')
+//     if(err){
+//         console.log('Error connecting to Database')
+//     }
+// })
+
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connection.on('connected',()=> console.log('connected to MongoDB database'))
+mongoose.connection.on('error', ()=> console.log('Error Connecting to Datbase'))
+
+
 
 
 app.post('/loginSubmit', (req, res)=>{
@@ -57,8 +71,7 @@ app.post('/loginSubmit', (req, res)=>{
     res.send({loggedin : true, userId: 12345})
 
 })
-
-app.post('/signupSubmit',(req, res)=>{
+app.post('/signupSubmit', (req, res)=>{
 
 
     //{name, email, password, confirmPassword, error}
@@ -68,41 +81,52 @@ app.post('/signupSubmit',(req, res)=>{
     const email = req.body.email
     const password = req.body.password
 
+    
+        const newUser = new User({
 
-    const newUser = new User({
+            _id: mongoose.Types.ObjectId(),
+            name: name, 
+            email: email,
+            password: password,
+        })
 
-        name, 
-        email,
-        password,
-    })
-
-    newUser.save()
-    .then(()=> res.json('User Added to database'))
-
-
-    console.log('signup request received')
-    console.log(req.body)
-    res.send({status: 'done'})
+        console.log("The request has been submitted")
+        console.log(name + ' ' + email)
+        newUser.save()
+        .then(()=> res.json('User Added to database'))
 
 })
 app.post('/registerOrgSubmit', (req,res)=> {
 
-
     //Insert this data to the database to create a new club
-    //{name, location, About}
-    console.log('register organization request received')
-    console.log(req.body)
-    res.send({status: 'done'})
+    //{name, location, about}
+    const name = req.body.name
+    const location = req.body.location
+    const about = req.body.about
+
+    console.log(name +' ' + location + ' ' + about)
+
+    const newOrg = new Organization({
+
+        _id: mongoose.Types.ObjectId(),
+        name: name,
+        location: location,
+        about: about
+    })
+    console.log(newOrg)
+    newOrg.save()
+    .then(()=>res.send(JSON.stringify({success: true})))
+    .catch(err => res.send(JSON.stringify({error: err})))
 })
 
-app.get('/checkIfloggedIn', (req, res)=>{
+app.get('/getBrowseOrgs', (req,res) => {
 
-    //send the session data res.send({loggedIn: req.session.loggedin}, user_id: req.session.user_id)
+    console.log('getting Orgs')
 
-    res.send({loggedin: true})
-     
- 
- })
+    Organization.find({},(err, orgs)=>{
+
+    })
+})
 
 
 

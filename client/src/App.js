@@ -24,7 +24,7 @@ class App extends React.Component {
   componentDidMount(){
     this.getData()
 
-    setInterval(this.getData, 5000)
+  //  setInterval(this.getData, 5000)
 
   }
 

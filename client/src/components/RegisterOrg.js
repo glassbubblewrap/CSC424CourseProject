@@ -6,7 +6,7 @@ class RegisterOrg extends React.Component{
 
     constructor(props){
         super(props);
-        this.state = { name: '',location:'', about: '', error:''}  // initial state
+        this.state = { name: '',location:'', about: '', error:'', success: ''}  // initial state
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
       }
@@ -15,7 +15,6 @@ class RegisterOrg extends React.Component{
        //TO DO
        e.preventDefault()
 
-       e.preventDefault()
         fetch('http://localhost:4000/registerOrgSubmit', {
             method: 'POST',
             headers: {
@@ -27,7 +26,10 @@ class RegisterOrg extends React.Component{
         .then(data => {
 
             if(data.error){
-                this.setState({...this.state, error: data.error})
+                this.setState({...this.state, error : data.error})
+            }
+            if(data.success){
+                this.setState({...this.state, success: 'Your organization has been added successfully'})
             }
         })
         //this.setState({...this.state, error: 'Password and Confirm Password fields must match'})
@@ -46,7 +48,7 @@ class RegisterOrg extends React.Component{
 
     //Set form back to initial state
     resetForm(){
-        this.setState({ name: '', location: '',about: '' ,error:''})    
+        this.setState({ name: '', location: '',about: '', error: '' })    
     }
 
     render(){
@@ -63,9 +65,12 @@ class RegisterOrg extends React.Component{
                     
                     <label htmlFor='about'> About: </label>
                     <textarea id= 'about' name='about' value= {this.state.about} onChange= {this.handleChange} rows='4' cols='50'/>
+
+                    <p>{this.state.error}</p>
+                    <p>{this.state.success}</p>
                     
                     <input type= 'submit' value= 'Register Your Organization'/>
-                    <p id= 'errorMessage'>{this.state.error}</p>
+                
                 </div>
             </form>
         )

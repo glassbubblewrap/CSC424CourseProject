@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Organization = require('./organization.model.js')
+const Organization = require('./organization.model')
 
 const Schema = mongoose.Schema;
 
@@ -9,8 +9,7 @@ const userSchema = new Schema({
     name: {
         type: String,
         required: true,
-        trim: true,
-        minlength: 3
+        trim: true
     },
     email: {
         type: String,
@@ -31,8 +30,8 @@ const userSchema = new Schema({
         {
 
            org_id:{ 
-               type: Schema.Types.ObjectId, ref: Organization,
-               required: true
+               type: Schema.Types.ObjectId, 
+               ref: Organization,
             }
         }
     ]

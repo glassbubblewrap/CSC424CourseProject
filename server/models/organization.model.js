@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const User = require('./user.model.js')
+const User = require('./user.model')
 
 
 const Schema = mongoose.Schema;
@@ -26,14 +26,15 @@ const OrganizationSchema = new Schema({
         {
             user_id: {
                 type:Schema.Types.ObjectId,
-                required: true,
-                unique: true
+                required:true,
+                unique:true
             },
             status:{
                 type: String,
                 required: true,
                 trim: true
             }
+            
         }
     ],
     events:[
