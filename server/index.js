@@ -1,21 +1,22 @@
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
-const cors = require('cors')
 const bcrypt = require('bcrypt')
+const cookieParser = require('cookie-parser')
+const validator = require('express-validator')
+const cors = require('cors')
 const mongoose = require('mongoose')
-const MongoClient = require('mongodb').MongoClient;
 const app = express()
 const PORT = 4000
 const usersRouter = require('./routes/users');
 const orgRouter = require('./routes/organizations')
 const Organization = require('./models/organization.model')
 const User = require('./models/user.model')
+const { check } = require('express-validator')
+
+
 
 require('dotenv').config();
-
-
-
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
@@ -34,102 +35,202 @@ app.use(session({
 
 const url = "mongodb+srv://admin:USM123@cluster0.wl7k0.mongodb.net/CSCProjectDatabase?retryWrites=true&w=majority";
 
-//  const client = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
-// client.connect(err => {
-//     console.log('connection Established')
-//     if(err){
-//         console.log('Error connecting to Database')
-//     }
-// })
 
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
-mongoose.connection.on('connected',()=> console.log('connected to MongoDB database'))
 mongoose.connection.on('error', ()=> console.log('Error Connecting to Datbase'))
-
-
-
-
-app.post('/loginSubmit', (req, res)=>{
-
-    //Check the database for the email 
-    // if that email exists make sure the entered password 
-    //is the same as the password in the database
-    //{email, password}
-    //if those checks don't pass send a response of format {error: 'string'}
-    // I am not sure how to keep track of if someone is logged in or not 
-    // req.session.loggedin = true
-    //req.session.userId = the id of the user that logged in
-
-    // make sure that the email exist in the database
-    // compare the password field of the request to the password in the database
-    //
-    console.log('request submitted')
-
-    req.session.loggedin = true
-    req.session.userId = 12345
-
-    res.send({loggedin : true, userId: 12345})
-
+mongoose.connection.on('disconnect', ()=> {
+    console.log('Disconnected from Server')
+    return
 })
-app.post('/signupSubmit', (req, res)=>{
+mongoose.connection.on('connected', ()=> {
 
 
-    //{name, email, password, confirmPassword, error}
-    //if no errors set req.session.loggedin = true and req.session.userId = the new id of the user
+    // app.use('/user', usersRouter)
+    // app.use('/orgaization', orgRouter)
 
-    const name = req.body.name
-    const email = req.body.email
-    const password = req.body.password
-
+    app.post('/loginSubmit',[ 
+        
+        validator.check('email').isEmail().normalizeEmail().trim().escape(),
+        validator.check('password').isLength({min: 8}).trim().escape()
+        ],
+        (req, res)=>{
     
-        const newUser = new User({
+        //Check the database for the email 
+        // if that email exists make sure the entered password 
+        //is the same as the password in the database
+        //{email, password}
+        //if those checks don't pass send a response of format {error: 'string'}
+        // I am not sure how to keep track of if someone is logged in or not 
+        // req.session.loggedin = true
+        //req.session.userId = the id of the user that logged in
+    
+        // make sure that the email exist in the database
+        // compare the password field of the request to the password in the database
+        //
+    
+        //cookies
+    
+        let email = req.body.email
+        let password = req.body.password
 
-            _id: mongoose.Types.ObjectId(),
-            name: name, 
-            email: email,
-            password: password,
+
+        User.findOne({email: email}, (err, user)=>{
+
+            if(!user){
+                res.send({error: 'Invalid Email or Password'})
+            }else{
+
+                let match = bcrypt.compareSync(password, user.password)
+                if(match){
+                    
+                    res.cookie('currentUser', user.email,{
+                        maxAge: 60*60*100,
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: true,
+                        domain: 'localhost:3000',
+                        path: '/'
+
+                    }).send({success: true})
+
+                }
+                else{
+                    res.send({error: 'Invalid Email or Password' })
+                }
+            }
+
+
         })
-
-        console.log("The request has been submitted")
-        console.log(name + ' ' + email)
-        newUser.save()
-        .then(()=> res.json('User Added to database'))
-
-})
-app.post('/registerOrgSubmit', (req,res)=> {
-
-    //Insert this data to the database to create a new club
-    //{name, location, about}
-    const name = req.body.name
-    const location = req.body.location
-    const about = req.body.about
-
-    console.log(name +' ' + location + ' ' + about)
-
-    const newOrg = new Organization({
-
-        _id: mongoose.Types.ObjectId(),
-        name: name,
-        location: location,
-        about: about
+    
+    
+        //res.send({loggedin : true, userId: 12345})
+    
     })
-    console.log(newOrg)
-    newOrg.save()
-    .then(()=>res.send(JSON.stringify({success: true})))
-    .catch(err => res.send(JSON.stringify({error: err})))
-})
+    app.post('/signupSubmit',[
+    
+        check('name').isLength({min: 3}).trim().escape(),
+        check('email').isEmail().normalizeEmail().trim().escape(),
+        check('password').isLength({min: 8}).trim().escape()
+    ],
+    (req, res)=>{
+    
+        //{name, email, password, confirmPassword, error}
+        //if no errors set req.session.loggedin = true and req.session.userId = the new id of the user
+        let name = req.body.name
+        let email = req.body.email
+        let password = req.body.password
+        let SALT = 10
 
-app.get('/getBrowseOrgs', (req,res) => {
+        res.clearCookie('currentUser')
+        User.findOne({email: email}, (err,user)=>{
 
-    console.log('getting Orgs')
+            if(user){
+                res.send({error: 'This email is already regisered'})
+            }else{
 
-    Organization.find({},(err, orgs)=>{
+                bcrypt.genSalt(SALT, (err, salt)=>{
+                    if(err){
+                        console.log(err)
+                        return
+                    }
+                    bcrypt.hash(password, salt,(err,hash)=>{
 
+                        if(err){
+                            console.log(err)
+                            return
+                        }
+                        const newUser = new User({
+
+                            _id: mongoose.Types.ObjectId(),
+                            name: name,
+                            email: email,
+                            password: hash
+
+                        })
+                        newUser.save((err, response)=>{
+                            if(err){
+                                console.log(err)
+                                return
+                            }
+                            console.log('User added to Database')
+                            res.cookie('currentUser', newUser.email,{
+                                maxAge: 60*60*100,
+                                httpOnly: true,
+                                secure: true,
+                                sameSite: true,
+                                domain: 'localhost:3000',
+                                path: '/'
+
+                            }).send({success: true})
+                            
+                        })
+                    })
+                })
+            }
+        })
+       
     })
+    
+    
+    app.post('/registerOrgSubmit', [
+        check('name').isLength({min: 3}).trim().escape().withMessage('Name must be at least 3 characters long'),
+        check('location').trim().escape(),
+        check('about').trim().escape()
+    ],
+    (req,res)=> {
+
+        //Insert this data to the database to create a new club
+        //{name, location, about}
+        const name = req.body.name
+        const location = req.body.location
+        const about = req.body.about
+    
+        console.log(name +' ' + location + ' ' + about)
+    
+        const newOrg = new Organization({
+    
+            _id: mongoose.Types.ObjectId(),
+            name: name,
+            location: location,
+            about: about
+        })
+        console.log(newOrg)
+        newOrg.save()
+        .then(()=>res.send(JSON.stringify({success: true})))
+        .catch(err => res.send(JSON.stringify({error: err})))
+        //log error to file and send general error
+    })
+    
+    app.get('/getBrowseOrgs', (req,res) => {
+    
+        console.log('getting Orgs')
+    
+        const query = Organization.find({}).select('name location') 
+    
+    
+        query.exec((err,result)=>{
+            if(err){
+                console.log(err)
+            }else{
+                delete result._id
+                console.log(result)
+                res.send(result)
+            }
+        })
+        // Organization.find({}, (err, orgs)=>{
+
+        
+        //     if(err){
+        //         console.log(err)
+        //         res.send("Could not find any organizations")
+        //         return
+        //     }
+        //     console.log(orgs)
+
+        //     res.send(orgs)
+
+        // })
+    })
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+    console.log('connected to MongoDB database')
 })
-
-
-
-
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

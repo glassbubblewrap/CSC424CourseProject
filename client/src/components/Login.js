@@ -1,5 +1,6 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
+
 //import {Link} from 'react-router-dom'
 
 class Login extends React.Component{
@@ -13,7 +14,6 @@ class Login extends React.Component{
 
     handleSubmit(e){
 
-        //TO DO
         e.preventDefault()
         fetch('http://localhost:4000/loginSubmit', {
             method: 'POST',
@@ -25,12 +25,13 @@ class Login extends React.Component{
         .then(result=> result.json())
         .then(data => {
 
+            console.log(data.headers)
             if(data.error){
                 this.setState({...this.state, error: data.error})
             }
             else{
 
-                this.setState({...this.state, success: true, userId: data.userId})
+                this.setState({...this.state, success: true})
             }
         })
 
@@ -57,7 +58,8 @@ class Login extends React.Component{
     render(){
 
         if(this.state.success){
-            return <Redirect to= {{pathname:'/', state: {from: this.props.location, userId: this.state.userId}}} />
+
+            return <Redirect to= {{pathname:'/', state: {from: this.props.location}}} />
          }
 
     return(

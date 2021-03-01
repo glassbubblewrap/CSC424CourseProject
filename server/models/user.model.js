@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt')
 const Organization = require('./organization.model')
 
+let SALT = 10
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -36,6 +38,8 @@ const userSchema = new Schema({
         }
     ]
 })
+
+
 
 const User = mongoose.model('User', userSchema);
 

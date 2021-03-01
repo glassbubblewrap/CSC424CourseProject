@@ -11,18 +11,18 @@ class RenderOrgCards extends React.Component{
         this.state = {orgs: this.props.orgs}
     }
 
-   // this.state = {orgs: this.props.orgs}
   
     render(){
 
     
+        console.log(this.state)
         return( 
         
         <div>
             {this.state.orgs.map((org) => (
 
-                    <div>
-                        <OrgCard id={org.id} name={org.name} location= {org.location} />
+                    <div key= {org._id}>
+                        <OrgCard id={org._id} name={org.name} location= {org.location} />
                     </div>
 
             ))}
