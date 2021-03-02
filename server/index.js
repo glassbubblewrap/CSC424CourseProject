@@ -16,10 +16,12 @@ const { check } = require('express-validator')
 
 
 
-require('dotenv').config();
+//require('dotenv').config();
 
 app.use(bodyParser.urlencoded({extended: true}))
-app.use(cors())
+app.use(cors({
+    credentials:true
+}))
 app.use(bodyParser.json())
 
 app.use(orgRouter)
@@ -88,8 +90,6 @@ mongoose.connection.on('connected', ()=> {
                         httpOnly: true,
                         secure: true,
                         sameSite: true,
-                        domain: 'localhost:3000',
-                        path: '/'
 
                     }).send({success: true})
 
@@ -158,8 +158,6 @@ mongoose.connection.on('connected', ()=> {
                                 httpOnly: true,
                                 secure: true,
                                 sameSite: true,
-                                domain: 'localhost:3000',
-                                path: '/'
 
                             }).send({success: true})
                             
@@ -185,19 +183,24 @@ mongoose.connection.on('connected', ()=> {
         const location = req.body.location
         const about = req.body.about
     
-        console.log(name +' ' + location + ' ' + about)
+       
     
         const newOrg = new Organization({
     
             _id: mongoose.Types.ObjectId(),
             name: name,
             location: location,
-            about: about
+            about: about,
         })
         console.log(newOrg)
         newOrg.save()
-        .then(()=>res.send(JSON.stringify({success: true})))
-        .catch(err => res.send(JSON.stringify({error: err})))
+        .then(()=>res.send({success: true}))
+        .catch(err => { 
+            console.log(err)
+            console.log('This error occured while registering')
+            res.send({error: 'There has been a server error'})
+            
+        })
         //log error to file and send general error
     })
     

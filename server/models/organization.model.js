@@ -27,7 +27,7 @@ const OrganizationSchema = new Schema({
             user_id: {
                 type:Schema.Types.ObjectId,
                 required:true,
-                unique:true
+
             },
             status:{
                 type: String,
@@ -43,7 +43,6 @@ const OrganizationSchema = new Schema({
             _id: {
                 type: Schema.Types.ObjectId,
                 required: true,
-                unique: true
             },
             name:{
                 type: String,
@@ -69,7 +68,7 @@ const OrganizationSchema = new Schema({
             _id:{
                 type: Schema.Types.ObjectId,
                 required: true,
-                unique: true
+                //unique: true
             },
             title:{
                 type: String,
@@ -78,7 +77,7 @@ const OrganizationSchema = new Schema({
             },
             content:{
                 type: String,
-                required: true,
+               // required: true,
                 trim: true
             }
 

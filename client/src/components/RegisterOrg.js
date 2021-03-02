@@ -17,7 +17,6 @@ class RegisterOrg extends React.Component{
 
         fetch('http://localhost:4000/registerOrgSubmit', {
             method: 'POST',
-            credentials: 'include',
             headers: {
                 'Content-type': 'application/json'
             },
