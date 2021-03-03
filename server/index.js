@@ -124,6 +124,7 @@ mongoose.connection.on('connected', ()=> {
         res.clearCookie('currentUser')
         User.findOne({email: email}, (err,user)=>{
 
+            
             if(user){
                 res.send({error: 'This email is already regisered'})
             }else{
@@ -233,6 +234,26 @@ mongoose.connection.on('connected', ()=> {
         //     res.send(orgs)
 
         // })
+    })
+    app.post('/onAnnouncementSubmit', [
+        
+        check('title').trim().escape(),
+        check('content').trim().escape()
+    ],
+    (req,res) => {
+
+        
+
+        Organization.findByIdAndUpdate({_id: req.body.id},
+        { "$push": {announcements: {title: req.body.title, content: req.body.content}}}, (err) => {
+            if (err){
+                console.log(err);
+                res.send({error: "Could not add announcement :("})
+            }else{
+                res.send({error: "Announcement added successfully :)"})
+            }
+        })
+        
     })
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
     console.log('connected to MongoDB database')
