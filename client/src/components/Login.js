@@ -7,7 +7,7 @@ class Login extends React.Component{
 
     constructor(props){
         super(props)
-        this.state = { email: '', password: '', error: ''}   // initial state
+        this.state = { email: '', password: '', error: '', success: ''}   // initial state
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
       }
@@ -25,7 +25,7 @@ class Login extends React.Component{
         .then(result=> result.json())
         .then(data => {
 
-            console.log(data.headers)
+    
             if(data.error){
                 this.setState({...this.state, error: data.error})
             }

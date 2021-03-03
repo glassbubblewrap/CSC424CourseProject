@@ -24,7 +24,17 @@ class OrgAnnouncements extends React.Component{
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({id: this.state.org_id, title: this.state.title, content: this.state.content})
-        } )
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.error){
+                this.setState({...this.state,error: data.error})
+            }else if(data.success){
+                this.setState({...this.state, success: data.success})
+            }
+        })
+
+
     }
 
     handleChange(e){
@@ -59,6 +69,7 @@ class OrgAnnouncements extends React.Component{
                     <input type= 'submit' value = 'Submit' />
 
                     <p>{this.state.error}</p>
+                    <p>{this.state.success}</p>
 
                 </form>
             )

@@ -250,7 +250,7 @@ mongoose.connection.on('connected', ()=> {
                 console.log(err);
                 res.send({error: "Could not add announcement :("})
             }else{
-                res.send({error: "Announcement added successfully :)"})
+                res.send({success: "Announcement added successfully :)"})
             }
         })
         

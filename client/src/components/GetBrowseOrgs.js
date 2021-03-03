@@ -19,7 +19,6 @@ class GetBrowseOrgs extends React.Component{
         .then(res => res.json())
         .then(data =>{
             this.setState({...this.state, orgs: data} )
-            console.log(data)
         })
     }
 
