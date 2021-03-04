@@ -1,4 +1,5 @@
 import React from 'react'
+import '../App.css'
 
 
 
@@ -57,19 +58,25 @@ class RegisterOrg extends React.Component{
             <form onSubmit = {this.handleSubmit} method="POST">
                 <div className="formcontent">   
                 
-                    <label htmlFor='name'> Organization Name: </label>
-                    <input type='text' id ='name' name='name' value={this.state.name} onChange= {this.handleChange} required/>
-                
-                    <label htmlFor='location'> Location: </label>
-                    <input type='text' id ='location' name='location' value={this.state.location} onChange= {this.handleChange}/>
-                    
-                    <label htmlFor='about'> About: </label>
-                    <textarea id= 'about' name='about' value= {this.state.about} onChange= {this.handleChange} rows='4' cols='50'/>
+                    <div className="form-group">
+                        <label htmlFor='name'> Organization Name: </label>
+                        <input className="form-control" type='text' id ='name' name='name' value={this.state.name} onChange= {this.handleChange} required/>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor='location'> Location: </label>
+                        <input className="form-control" type='text' id ='location' name='location' value={this.state.location} onChange= {this.handleChange}/>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor='about'> About: </label>
+                        <textarea className="form-control" id= 'about' name='about' value= {this.state.about} onChange= {this.handleChange} rows='4' cols='50'/>
+                    </div>
 
                     <p>{this.state.error}</p>
                     <p>{this.state.success}</p>
                     
-                    <input type= 'submit' value= 'Register Your Organization'/>
+                    <input className="btn btn-primary" type= 'submit' value= 'Register Your Organization'/>
                 
                 </div>
             </form>

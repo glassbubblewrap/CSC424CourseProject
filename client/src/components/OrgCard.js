@@ -20,12 +20,12 @@ class OrgCard extends React.Component{
 
 
         return(
-            <div id='OrgCardDiv'>
+            <div id='OrgCardDiv' className="card">
             <nav>
                 <Link to= {path} >
-                <div >
-                    <h3> {this.state.name} </h3>
-                    <p> {this.state.location} </p>
+                <div className="card-body">
+                    <h3 className="card-title"> {this.state.name} </h3>
+                    <p className="card-text"> {this.state.location} </p>
                 </div>
                 </Link>
             </nav>

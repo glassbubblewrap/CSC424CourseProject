@@ -56,7 +56,10 @@ const OrganizationSchema = new Schema({
             date:{
                 type: Date,
             },
-            discription:{
+            time:{
+                type: String,
+            },
+            description:{
                 type: String,
                 trim: true
             }
