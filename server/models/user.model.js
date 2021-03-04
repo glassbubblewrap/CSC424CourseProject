@@ -1,18 +1,45 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt')
+const Organization = require('./organization.model')
 
+let SALT = 10
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    username: {
+    
+    _id: Schema.Types.ObjectId,
+    name: {
         type: String,
         required: true,
-        unique: true,
-        trim: true,
-        minlength: 3
+        trim: true
     },
-}, {
-    timestamps: true,
-});
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    password: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    bio:{
+        type: String,
+        trim: true
+    },
+    OrganizationsJoined:[
+
+        {
+
+           org_id:{ 
+               type: Schema.Types.ObjectId, 
+               ref: Organization,
+            }
+        }
+    ]
+})
+
+
 
 const User = mongoose.model('User', userSchema);
 

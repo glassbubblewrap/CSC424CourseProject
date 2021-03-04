@@ -4,7 +4,7 @@ class OrgEvents extends React.Component{
 
     constructor(props){
         super(props)
-        this.state ={org_id: this.props.org_id, isOrgLeader: true, formShown: true}
+        this.state ={org_id: this.props.org_id, showForm: false}
         this.toggleForm = this.toggleForm.bind(this)
     }
 
@@ -12,12 +12,12 @@ class OrgEvents extends React.Component{
 
         //fetch the events for this org using the id and save them to the state
         //Also check if the current user is in the org with the given id and their status in the org
-        fetch('http://localhost:4000')
+       // fetch('http://localhost:4000')
     }
 
     toggleForm(){
 
-        this.setState({...this.state, formShown : !this.state.formShown})
+        this.setState({...this.state, showForm: !this.state.showForm})
     }
 
     
@@ -25,15 +25,12 @@ class OrgEvents extends React.Component{
 
         let AddEventButton
 
-            if(this.state.isOrgLeader){
+           
                 AddEventButton = <button onClick= {this.toggleForm}>Add an Event</button>
 
-            }else{
-
-                AddEventButton = <div></div>
-            }
+            
             let EventForm
-            if(this.formShown){
+            if(this.state.showForm){
 
                 EventForm = (
                 <form>

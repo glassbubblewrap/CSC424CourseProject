@@ -56,7 +56,7 @@ class SignUp extends React.Component{
     render(){
 
             if(this.state.success){
-                return <Redirect to= {{pathname:'/profile', from: this.props.location}} />
+                return <Redirect to= {{pathname:'/', from: this.props.location}} />
              }
 
         return(
