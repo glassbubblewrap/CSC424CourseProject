@@ -1,6 +1,7 @@
 import React from 'react'
 import {Redirect} from 'react-router-dom'
 import './css/SignUp.css'
+import '../App.css'
 
 
 class SignUp extends React.Component{
@@ -63,19 +64,27 @@ class SignUp extends React.Component{
             <form onSubmit = {this.handleSubmit} method="POST">
                 <div className="formcontent">   
                 
-                    <label htmlFor='name'> Name: </label>
-                    <input type='text' id ='name' name='name' value={this.state.name} onChange= {this.handleChange} required/>
-                
-                    <label htmlFor='email'> Email: </label>
-                    <input type='text' id ='email' name='email' value={this.state.email} onChange= {this.handleChange} required/>
+                    <div className="form-group">
+                        <label htmlFor='name'> Name: </label>
+                        <input className="form-control" type='text' id ='name' name='name' value={this.state.name} onChange= {this.handleChange} required/>
+                    </div>
 
-                    <label htmlFor= 'password'>Password: </label>
-                    <input type='password' id ='password' name ='password' value={this.state.password} onChange= {this.handleChange} required/>
+                    <div className="form-group">
+                        <label htmlFor='email'> Email: </label>
+                        <input className="form-control" type='text' id ='email' name='email' value={this.state.email} onChange= {this.handleChange} required/>
+                    </div>
 
-                    <label htmlFor= 'confirmPassword'>Confirm Password: </label>
-                    <input type='password' id = 'confirmPassword' name ='confirmPassword' value={this.state.confirmPassword} onChange= {this.handleChange} required/>
-            
-                    <input type= 'submit' value= 'Create Account'/>
+                    <div className="form-group">
+                        <label htmlFor= 'password'>Password: </label>
+                        <input className="form-control" type='password' id ='password' name ='password' value={this.state.password} onChange= {this.handleChange} required/>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor= 'confirmPassword'>Confirm Password: </label>
+                        <input className="form-control" type='password' id = 'confirmPassword' name ='confirmPassword' value={this.state.confirmPassword} onChange= {this.handleChange} required/>
+                    </div>
+
+                    <input className="btn btn-primary" type= 'submit' value= 'Create Account'/>
                     <p id= 'errorMessage'>{this.state.error}</p>
                     
                 </div>

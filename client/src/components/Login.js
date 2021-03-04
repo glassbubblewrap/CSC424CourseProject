@@ -1,5 +1,6 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
+import '../App.css'
 
 //import {Link} from 'react-router-dom'
 
@@ -64,14 +65,19 @@ class Login extends React.Component{
 
     return(
         <form onSubmit = {this.handleSubmit} method="POST">
-                <div className="formcontent">               
-                    <label htmlFor="email">Email: </label>
-                    <input type="text" name="email" id="email" value={this.state.email} onChange= {this.handleChange} required/> 
+                <div className="formcontent">  
 
-                    <label htmlFor= "password">Password: </label>
-                    <input type="password" name ="password" id= "password" value={this.state.password} onChange={this.handleChange} required/>
+                    <div className="form-group">             
+                        <label htmlFor="email">Email: </label>
+                        <input className="form-control" type="text" name="email" id="email" value={this.state.email} onChange= {this.handleChange} required/> 
+                    </div>
 
-                    <input type= "submit" value= "Login"/>
+                    <div className="form-group">
+                        <label htmlFor= "password">Password: </label>
+                        <input className="form-control" type="password" name ="password" id= "password" value={this.state.password} onChange={this.handleChange} required/>
+                    </div>
+
+                    <input className="btn btn-primary" type= "submit" value= "Login"/>
                     
                     <p id='errorMessage'>{this.state.error} </p>
                 
