@@ -221,20 +221,23 @@ mongoose.connection.on('connected', ()=> {
                 res.send(result)
             }
         })
-        // Organization.find({}, (err, orgs)=>{
-
-        
-        //     if(err){
-        //         console.log(err)
-        //         res.send("Could not find any organizations")
-        //         return
-        //     }
-        //     console.log(orgs)
-
-        //     res.send(orgs)
-
-        // })
     })
+    // app.post('/getOrganizationData',[
+    //     check('id').trim().escape()
+    // ], (req,res)=>{
+
+    //     const org_id = req.body.id
+    //     Organization.findOne({_id: org_id}, (err, org)=>{
+
+    //         if(err){
+    //             console.log(err)
+    //             res.send({error: 'Could not find your organization'})
+    //         }else{
+    //             delete org._id
+    //             res.send(org)
+    //         }
+    //     })
+    // })
     app.post('/onAnnouncementSubmit', [
         
         check('title').trim().escape(),

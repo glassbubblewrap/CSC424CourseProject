@@ -14,8 +14,6 @@ class RenderOrgCards extends React.Component{
   
     render(){
 
-    
-        console.log(this.state)
         return( 
         
         <div>

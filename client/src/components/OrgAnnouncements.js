@@ -4,7 +4,7 @@ class OrgAnnouncements extends React.Component{
 
     constructor(props){
         super(props)
-        this.state ={org_id: this.props.org_id, isOrgLeader: true, formShown: true, title: '', content: '', error:''}
+        this.state ={org_id: this.props.org_id, isOrgLeader: true, formShown: false, title: '', content: '', error:''}
         this.toggleform = this.toggleform.bind(this)
         this.submitForm = this.submitForm.bind(this)
         this.handleChange = this.handleChange.bind(this)
@@ -62,10 +62,10 @@ class OrgAnnouncements extends React.Component{
                 <form onSubmit = {this.submitForm}>
                     <label htmlFor= 'title'> Title</label>
                     <input onChange={this.handleChange} value={this.state.title} type= 'text' id= 'title' name= 'title' required/>
-                    <br></br>
+                
                     <label htmlFor= 'content'> Content</label>
                     <input onChange={this.handleChange} value= {this.state.content} type= 'text' id= 'content' name= 'content' required/>
-                    <br></br>
+
                     <input type= 'submit' value = 'Submit' />
 
                     <p>{this.state.error}</p>

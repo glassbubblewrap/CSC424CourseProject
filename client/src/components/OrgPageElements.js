@@ -13,11 +13,31 @@ class OrgPageElements extends React.Component{
 
     constructor(props){
         super(props)
-        this.state = {org_id: this.props.match.params.org_id }
+        this.state = {org_id: this.props.match.params.org_id, org_data: '' , error:''}
     }
+    // componentDidMount(){
+
+    //     fetch('http://localhost:4000/getOrganizationData',{    
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-type': 'application/json'
+    //     },
+    //     body: JSON.stringify({id: this.state.org_id})
+    
+    // })
+    // .then(res => res.json())
+    // .then(data =>{
+    //     if(data.error){
+    //         this.setState({...this.state, error: data.error})
+    //     }else{
+    //         this.setState({...this.state, org_data: data})
+    //     }
+    // })
+    // }
 
     render(){
 
+        console.log(this.state.org_data)
         return(
             <div>
             <Router>
