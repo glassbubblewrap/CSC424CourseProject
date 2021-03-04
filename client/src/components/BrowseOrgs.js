@@ -1,5 +1,6 @@
 import React from 'react'
 import GetBrowseOrgs from './GetBrowseOrgs'
+import '../App.css'
 //import {BrowserRouter as Router} from 'react-router-dom'
 
 class BrowseOrgs extends React.Component{
@@ -25,9 +26,9 @@ class BrowseOrgs extends React.Component{
 
     render(){
         return(
-            <div>
+            <div className="browseOrgs">
 
-                <input type='search' id= 'searchBar' placeholder= 'Search'/>
+                <input className="form-control mr-sm-2" type='search' id= 'searchBar' placeholder= 'Search'/>
                    
                 <GetBrowseOrgs/>   
 

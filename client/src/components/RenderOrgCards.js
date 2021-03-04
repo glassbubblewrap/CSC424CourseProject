@@ -18,7 +18,7 @@ class RenderOrgCards extends React.Component{
         console.log(this.state)
         return( 
         
-        <div>
+        <div className="orgCard">
             {this.state.orgs.map((org) => (
 
                     <div key= {org._id}>

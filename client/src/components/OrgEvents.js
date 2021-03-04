@@ -1,4 +1,5 @@
 import React from 'react'
+import '../App.css'
 
 class OrgEvents extends React.Component{
 
@@ -68,26 +69,39 @@ class OrgEvents extends React.Component{
 
                 EventForm = (
                 <form onSubmit = {this.submitForm}>
+                    <div className="formcontent">
 
-                    <label htmlFor= 'eventName'> Event Name</label>
-                    <input onChange={this.handleChange} type= 'text' id= 'eventName' name= 'name' required/>
+                        <div className="form-group">
+                            <label htmlFor= 'eventName'> Event Name</label>
+                            <input className="form-control" onChange={this.handleChange} type= 'text' id= 'eventName' name= 'name' required/>
+                        </div>
 
-                    <label htmlFor= 'eventDate'> Event Date</label>
-                    <input onChange={this.handleChange} type= 'Date' id= 'eventDate' name= 'date' required/>
+                        <div className="form-group">
+                            <label htmlFor= 'eventDate'> Event Date</label>
+                            <input className="form-control" onChange={this.handleChange} type= 'Date' id= 'eventDate' name= 'date' required/>
+                        </div>
 
-                    <label htmlFor= 'eventDate'> Event Time</label>
-                    <input onChange={this.handleChange} type= 'text' id= 'eventTime' name= 'time' required/>
+                        <div className="form-group">
+                            <label htmlFor= 'eventDate'> Event Time</label>
+                            <input className="form-control" onChange={this.handleChange} type= 'text' id= 'eventTime' name= 'time' required/>
+                        </div>
 
-                    <label htmlFor= 'eventLocation'>Location </label>
-                    <input onChange={this.handleChange} type= 'text' id= 'eventLocation' name= 'location' required/>
+                        <div className="form-group">
+                            <label htmlFor= 'eventLocation'>Location </label>
+                            <input className="form-control" onChange={this.handleChange} type= 'text' id= 'eventLocation' name= 'location' required/>
+                        </div>
 
-                    <label htmlFor= 'eventDescription'>Description</label>
-                    <input onChange={this.handleChange} type='text' id='eventDescription' name='description' />
+                        <div className="form-group">
+                            <label htmlFor= 'eventDescription'>Description</label>
+                            <input className="form-control" onChange={this.handleChange} type='text' id='eventDescription' name='description' />
+                        </div>
 
-                    <input type= 'submit' value = 'Add Event' />
+                        <input className="btn btn-primary" type= 'submit' value = 'Add Event' />
 
-                    <p>{this.state.error}</p>
-                    <p>{this.state.success}</p>
+                        <p>{this.state.error}</p>
+                        <p>{this.state.success}</p>
+
+                    </div>
 
                 </form>
                 )
