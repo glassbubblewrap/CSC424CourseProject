@@ -255,6 +255,33 @@ mongoose.connection.on('connected', ()=> {
         })
         
     })
+
+    app.post('/onEventSubmit', [
+        check('name').trim().escape(),
+        check('location').trim().escape(),
+        check('date').trim().escape(),
+        check('time').trim().escape(),
+        check('description').trim().escape()
+    ],
+    (req, res) => {
+        Organization.findByIdAndUpdate({_id: req.body.id},{ 
+            "$push": {
+                events: {
+                    name: req.body.name, 
+                    location: req.body.location, 
+                    date: req.body.date, 
+                    time: req.body.time,
+                    description: req.body.description}}}, (err) => {
+                        if(err){
+                            console.log(err);
+                            res.send({error: "Could not add event"})
+                        }
+                        else{
+                            res.send({success: "Event added successfully!"})
+                        }
+                    })
+    })
+
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
     console.log('connected to MongoDB database')
 })
