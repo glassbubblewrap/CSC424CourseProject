@@ -1,10 +1,11 @@
 import React from 'react'
+import Annoucement from './Announcement'
 
 class OrgAnnouncements extends React.Component{
 
     constructor(props){
         super(props)
-        this.state ={org_id: this.props.org_id, isOrgLeader: true, formShown: false, title: '', content: '', error:''}
+        this.state ={org_id: this.props.org_id, announcements: this.props.announcements, isOrgLeader: true, formShown: false, title: '', content: '', error:''}
         this.toggleform = this.toggleform.bind(this)
         this.submitForm = this.submitForm.bind(this)
         this.handleChange = this.handleChange.bind(this)
@@ -30,7 +31,8 @@ class OrgAnnouncements extends React.Component{
             if(data.error){
                 this.setState({...this.state,error: data.error})
             }else if(data.success){
-                this.setState({...this.state, success: data.success})
+                let newAnnouncements = this.state.announcements.concat({title: this.state.title, content: this.state.content})
+                this.setState({...this.state, announcements: newAnnouncements, success: data.success})
             }
         })
 
@@ -48,7 +50,7 @@ class OrgAnnouncements extends React.Component{
     render(){
 
         let AddAnnouncementButton
-
+        
         if (this.state.isOrgLeader){
             AddAnnouncementButton = <button onClick= {this.toggleform}>Add Announcement</button>
         }
@@ -60,17 +62,24 @@ class OrgAnnouncements extends React.Component{
         if (this.state.formShown){
             addAnnouncementForm = (
                 <form onSubmit = {this.submitForm}>
-                    <label htmlFor= 'title'> Title</label>
-                    <input onChange={this.handleChange} value={this.state.title} type= 'text' id= 'title' name= 'title' required/>
-                
-                    <label htmlFor= 'content'> Content</label>
-                    <input onChange={this.handleChange} value= {this.state.content} type= 'text' id= 'content' name= 'content' required/>
+                    <div className="formcontent">
 
-                    <input type= 'submit' value = 'Submit' />
+                        <div className="form-group">
+                            <label htmlFor= 'title'> Title</label>
+                            <input className="form-control" onChange={this.handleChange} value={this.state.title} type= 'text' id= 'title' name= 'title' required/>
+                        </div>
 
-                    <p>{this.state.error}</p>
-                    <p>{this.state.success}</p>
+                        <div className="form-group">
+                            <label htmlFor= 'content'> Content</label>
+                            <input className="form-control" onChange={this.handleChange} value= {this.state.content} type= 'text' id= 'content' name= 'content' required/>
+                        </div>
 
+                        <input className="btn btn-primary" type= 'submit' value = 'Submit' />
+
+                        <p>{this.state.error}</p>
+                        <p>{this.state.success}</p>
+
+                        </div>
                 </form>
             )
         }
@@ -80,8 +89,16 @@ class OrgAnnouncements extends React.Component{
 
     return(
         <div>
-            <h1> {this.state.org_id}</h1>
+            
             <h1>Your Orgs announcements</h1>
+
+            {this.state.announcements.map((announcement) => (
+
+                <div key= {announcement.title}>
+                    <Annoucement announcement={announcement}/>
+                </div>
+
+))}
             {AddAnnouncementButton}
             {addAnnouncementForm}
         </div>

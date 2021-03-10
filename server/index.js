@@ -1,6 +1,5 @@
 const express = require('express')
 const session = require('express-session')
-const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const cookieParser = require('cookie-parser')
 const validator = require('express-validator')
@@ -18,21 +17,24 @@ const { check } = require('express-validator')
 
 //require('dotenv').config();
 
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(express.urlencoded({extended: true}))
 app.use(cors({
+    origin: 'http://localhost:3000',
     credentials:true
 }))
-app.use(bodyParser.json())
+
+app.use(express.json())
+app.use(cookieParser())
 
 app.use(orgRouter)
 app.use(usersRouter)
 
 
-app.use(session({
-    secret:'lafjekjfo39rt0t4-))_R03i9rt4#REW"QR#', // value here can be anything
-    resave: true,
-    saveUninitialized: true
-}))
+// app.use(session({
+//     secret:'lafjekjfo39rt0t4-))_R03i9rt4#REW"QR#', // value here can be anything
+//     resave: true,
+//     saveUninitialized: true
+// }))
 
 
 const url = "mongodb+srv://admin:USM123@cluster0.wl7k0.mongodb.net/CSCProjectDatabase?retryWrites=true&w=majority";
@@ -50,6 +52,23 @@ mongoose.connection.on('connected', ()=> {
     // app.use('/user', usersRouter)
     // app.use('/orgaization', orgRouter)
 
+    app.get('/checkIfloggedIn', (req, res)=>{
+
+       
+        if(req.cookies.currentUser){
+            res.send({user: req.cookies.currentUser})
+        }
+        else{
+          
+            res.send({loggedIn: false})
+        }
+    })
+    app.get('/clearCookie', (req,res)=>{
+
+        res.clearCookie('currentUser')
+        return res.sendStatus(200)
+    })
+
     app.post('/loginSubmit',[ 
         
         validator.check('email').isEmail().normalizeEmail().trim().escape(),
@@ -63,9 +82,7 @@ mongoose.connection.on('connected', ()=> {
         //{email, password}
         //if those checks don't pass send a response of format {error: 'string'}
         // I am not sure how to keep track of if someone is logged in or not 
-        // req.session.loggedin = true
-        //req.session.userId = the id of the user that logged in
-    
+
         // make sure that the email exist in the database
         // compare the password field of the request to the password in the database
         //
@@ -75,7 +92,7 @@ mongoose.connection.on('connected', ()=> {
         let email = req.body.email
         let password = req.body.password
 
-
+        
         User.findOne({email: email}, (err, user)=>{
 
             if(!user){
@@ -88,7 +105,7 @@ mongoose.connection.on('connected', ()=> {
                     res.cookie('currentUser', user.email,{
                         maxAge: 60*60*100,
                         httpOnly: true,
-                        secure: true,
+                        //secure: true,
                         sameSite: true,
 
                     }).send({success: true})
@@ -121,7 +138,7 @@ mongoose.connection.on('connected', ()=> {
         let password = req.body.password
         let SALT = 10
 
-        res.clearCookie('currentUser')
+        
         User.findOne({email: email}, (err,user)=>{
 
             
@@ -157,7 +174,7 @@ mongoose.connection.on('connected', ()=> {
                             res.cookie('currentUser', newUser.email,{
                                 maxAge: 60*60*100,
                                 httpOnly: true,
-                                secure: true,
+                                //secure: true,
                                 sameSite: true,
 
                             }).send({success: true})
@@ -192,13 +209,21 @@ mongoose.connection.on('connected', ()=> {
             name: name,
             location: location,
             about: about,
+            members:[{user_email: req.cookies.currentUser, status: 'Leader'}]
         })
-        console.log(newOrg)
+        
+        
         newOrg.save()
+        .then(User.findOneAndUpdate({email: req.cookies.currentUser}, { "$push": {OrganizationsJoined: {org_id: newOrg._id}}}, 
+        (err)=> {
+            if(err){
+                console.log(err)
+                res.send({error: 'Could not add organization leader'})
+            }
+        }))
         .then(()=>res.send({success: true}))
         .catch(err => { 
             console.log(err)
-            console.log('This error occured while registering')
             res.send({error: 'There has been a server error'})
             
         })
@@ -206,9 +231,7 @@ mongoose.connection.on('connected', ()=> {
     })
     
     app.get('/getBrowseOrgs', (req,res) => {
-    
-        console.log('getting Orgs')
-    
+
         const query = Organization.find({}).select('name location') 
     
     
@@ -217,27 +240,60 @@ mongoose.connection.on('connected', ()=> {
                 console.log(err)
             }else{
                 delete result._id
-                console.log(result)
                 res.send(result)
             }
         })
     })
-    // app.post('/getOrganizationData',[
-    //     check('id').trim().escape()
-    // ], (req,res)=>{
 
-    //     const org_id = req.body.id
-    //     Organization.findOne({_id: org_id}, (err, org)=>{
+    app.get('/getUserOrgs', (req, res)=>{
 
-    //         if(err){
-    //             console.log(err)
-    //             res.send({error: 'Could not find your organization'})
-    //         }else{
-    //             delete org._id
-    //             res.send(org)
-    //         }
-    //     })
-    // })
+        
+
+        const query = User.findOne({email: req.cookies.currentUser}).select('OrganizationsJoined') 
+        
+        query.exec((err,result)=>{
+            if(err){
+                console.log(err)
+            }else{
+
+                let userOrgs = []
+                result.OrganizationsJoined.forEach(element => {
+
+                    
+                    const FindOrg =  Organization.findOne({_id: element.org_id}).select('name location ')
+                    FindOrg.exec((err, data)=>{
+
+                        if(err){
+                            console.log(err)
+                        }else{
+                            userOrgs.push(data)
+                        }
+
+                    })
+                
+
+                    
+                });
+                res.send(userOrgs)
+            }
+        
+        })
+    })
+    app.post('/getOrganizationData',[
+        check('id').trim().escape()
+    ], (req,res)=>{
+
+        const org_id = req.body.id
+        Organization.findOne({_id: org_id}, (err, org)=>{
+
+            if(err){
+                console.log(err)
+                res.send({error: 'Could not find your organization'})
+            }else{
+                res.send(org)
+            }
+        })
+    })
     app.post('/onAnnouncementSubmit', [
         
         check('title').trim().escape(),
@@ -258,6 +314,33 @@ mongoose.connection.on('connected', ()=> {
         })
         
     })
+
+    app.post('/onEventSubmit', [
+        check('name').trim().escape(),
+        check('location').trim().escape(),
+        check('date').trim().escape(),
+        check('time').trim().escape(),
+        check('description').trim().escape()
+    ],
+    (req, res) => {
+        Organization.findByIdAndUpdate({_id: req.body.id},{ 
+            "$push": {
+                events: {
+                    name: req.body.name, 
+                    address: req.body.address, 
+                    date: req.body.date, 
+                    time: req.body.time,
+                    description: req.body.description }}}, (err) => {
+                        if(err){
+                            console.log(err);
+                            res.send({error: "Could not add event"})
+                        }
+                        else{
+                            res.send({success: "Event added successfully!"})
+                        }
+                    })
+    })
+
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
     console.log('connected to MongoDB database')
 })

@@ -24,8 +24,9 @@ const OrganizationSchema = new Schema({
     members:[
 
         {
-            user_id: {
-                type:Schema.Types.ObjectId,
+            
+            user_email: {
+                type: String,
                 required:true,
 
             },
@@ -56,7 +57,10 @@ const OrganizationSchema = new Schema({
             date:{
                 type: Date,
             },
-            discription:{
+            time:{
+                type: String,
+            },
+            description:{
                 type: String,
                 trim: true
             }
