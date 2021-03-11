@@ -11,10 +11,19 @@ class SignUp extends React.Component{
         this.state = { name: '',email:'', password: '', confirmPassword: '', error:''}  // initial state
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-      }
+    }
+
+    componentDidMount(){
+
+        fetch('http://localhost:4000/clearCookie', {
+          origin: 'http://localhost:4000',
+          credentials: 'include',
+        })
+    }
+
 
     handleSubmit(e){
-       //TO DO
+
        e.preventDefault()
        if(this.state.password !== this.state.confirmPassword){
            this.setState({...this.state, error: 'Password and Confirm Password fields must match'})
@@ -22,6 +31,8 @@ class SignUp extends React.Component{
         
             fetch('http://localhost:4000/signupSubmit', {
                 method: 'POST',
+                origin: 'http://localhost:4000',
+                credentials: 'include',
                 headers: {
                     'Content-type': 'application/json'
                 },

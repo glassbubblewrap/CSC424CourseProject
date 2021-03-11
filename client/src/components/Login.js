@@ -12,12 +12,20 @@ class Login extends React.Component{
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
       }
+      componentDidMount(){
+          fetch('http://localhost:4000/clearCookie',{
+            origin: 'http://localhost:4000',
+            credentials: 'include',
+          })
+      }
 
     handleSubmit(e){
 
         e.preventDefault()
         fetch('http://localhost:4000/loginSubmit', {
             method: 'POST',
+            origin: 'http://localhost:4000',
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/json'
             },

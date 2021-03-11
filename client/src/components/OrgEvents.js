@@ -1,26 +1,21 @@
 import React from 'react'
 import '../App.css'
+import Event from './Event'
 
 class OrgEvents extends React.Component{
 
     constructor(props){
         super(props)
-        this.state ={org_id: this.props.org_id, showForm: false}
-        this.toggleForm = this.toggleForm.bind(this)
+        this.state ={org_id: this.props.org_id, events: this.props.events, isOrgLeader: true, formShown: false, name: '', address: '', date: '', time: '', description: ''}
+        this.toggleform = this.toggleform.bind(this)
         this.submitForm = this.submitForm.bind(this)
         this.handleChange = this.handleChange.bind(this)
     }
 
-    componentDidMount(){
+    toggleform(){
 
-        //fetch the events for this org using the id and save them to the state
-        //Also check if the current user is in the org with the given id and their status in the org
-        //fetch('http://localhost:4000')
-    }
+        this.setState({...this.state, formShown:!this.state.formShown})
 
-    toggleForm(){
-
-        this.setState({...this.state, showForm : !this.state.showForm})
     }
 
     submitForm(e){
@@ -45,7 +40,8 @@ class OrgEvents extends React.Component{
                 this.setState({...this.state, error: data.error})
             }
             else if(data.success){
-                this.setState({...this.state, success: data.success})
+                let newEvent = this.state.events.concat({name: this.state.name, address: this.state.address, date: this.state.date, time: this.state.time, discription: this.state.discription})
+                this.setState({...this.state, events: newEvent, success: data.success})
             }
         })
     }
@@ -61,11 +57,16 @@ class OrgEvents extends React.Component{
     render(){
 
         let AddEventButton
-
-            AddEventButton = <button onClick= {this.toggleForm}>Add an Event</button>
+        
+        if (this.state.isOrgLeader){
+            AddEventButton = <button onClick= {this.toggleform}>Add an Event</button>
+        }
+        else{
+            AddEventButton = <div></div>
+        }
 
             let EventForm
-            if(this.state.showForm){
+            if(this.state.formShown){
 
                 EventForm = (
                 <form onSubmit = {this.submitForm}>
@@ -87,8 +88,8 @@ class OrgEvents extends React.Component{
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor= 'eventLocation'>Location </label>
-                            <input className="form-control" onChange={this.handleChange} type= 'text' id= 'eventLocation' name= 'location' required/>
+                            <label htmlFor= 'eventAddress'>Address </label>
+                            <input className="form-control" onChange={this.handleChange} type= 'text' id= 'eventAddress' name= 'address' required/>
                         </div>
 
                         <div className="form-group">
@@ -112,9 +113,18 @@ class OrgEvents extends React.Component{
 
         return(
             <div>
-                <p> Events</p>
+                <h1> Events</h1>
+
+                {this.state.events.map((event) => (
+
+                    <div key= {event.name}>
+                    <Event event={event}/>
+                    </div>
+                ))}
+
                 {AddEventButton}
                 {EventForm}
+
             </div>
 
         )
