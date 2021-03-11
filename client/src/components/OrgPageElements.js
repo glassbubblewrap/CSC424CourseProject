@@ -52,7 +52,7 @@ class OrgPageElements extends React.Component{
                         <OrgEvents {...props} events ={this.state.org_data.events} org_id= {this.state.org_id} />
                     )}/>  
                     <Route path= '/members'render= {(props) => (
-                        <OrgMembers{...props} org_id= {this.state.org_id} />
+                        <OrgMembers {...props} members ={this.state.org_data.members} org_id= {this.state.org_id} />
                     )} />
                     <Route path= '/chat' render= {(props) => (
                         <OrgChat {...props} org_id= {this.state.org_id} />
